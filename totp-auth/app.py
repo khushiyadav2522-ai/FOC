@@ -41,7 +41,7 @@ HISTORY_FILE = os.path.join(os.path.dirname(__file__), "history.json")
 PBKDF2_ITERATIONS = 200_000
 
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(32)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", secrets.token_hex(32))
 
 
 # --------------------------------------------------------------------------
