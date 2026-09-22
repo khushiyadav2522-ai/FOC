@@ -27,6 +27,7 @@ import io
 import json
 import os
 import secrets
+import tempfile
 import time
 from datetime import datetime, timezone
 
@@ -36,8 +37,10 @@ from flask import (Flask, flash, redirect, render_template, request,
                     session, url_for, send_file)
 
 APP_NAME = "Aegis"          # Shown inside the authenticator app
-DB_FILE = os.path.join(os.path.dirname(__file__), "users.json")
-HISTORY_FILE = os.path.join(os.path.dirname(__file__), "history.json")
+DATA_DIR = os.path.join(tempfile.gettempdir(), "aegis") if os.environ.get("VERCEL") else os.path.dirname(__file__)
+os.makedirs(DATA_DIR, exist_ok=True)
+DB_FILE = os.path.join(DATA_DIR, "users.json")
+HISTORY_FILE = os.path.join(DATA_DIR, "history.json")
 PBKDF2_ITERATIONS = 200_000
 
 app = Flask(__name__)
