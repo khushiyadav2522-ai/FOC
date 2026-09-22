@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Aegis — Two-Factor Authentication{% endblock %}
+{% block content %}
+<h1>Welcome to Aegis</h1>
+<p class="sub">A focused security module protecting account access with password + time-based one-time codes.</p>
+
+{% if user %}
+  <p class="sub">Signed in as <b>{{ user }}</b>.</p>
+  <a href="{{ url_for('dashboard') }}"><button class="primary" type="button">Go to Dashboard</button></a>
+  <p class="foot"><a href="{{ url_for('logout') }}">Log out</a></p>
+{% else %}
+  <a href="{{ url_for('login') }}"><button class="primary" type="button">Sign In</button></a>
+  <p class="foot">New to Aegis? <a href="{{ url_for('register') }}">Set up an account</a></p>
+{% endif %}
+{% endblock %}

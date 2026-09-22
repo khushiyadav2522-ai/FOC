@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Identity Check — Aegis{% endblock %}
+{% block content %}
+<h1>Identity check</h1>
+<p class="sub">Enter the 6-digit code from your authenticator app to finish signing in.</p>
+<form method="post" id="otpForm">
+  <div class="otp-boxes">
+    {% for i in range(6) %}
+    <input type="text" inputmode="numeric" maxlength="1" class="digit" autocomplete="one-time-code" {% if i==0 %}autofocus{% endif %}>
+    {% endfor %}
+  </div>
+  <input type="hidden" name="code" id="codeField">
+  <button class="primary" type="submit">Verify</button>
+</form>
+<script>
+  const digits = Array.from(document.querySelectorAll('.digit'));
+  const hidden = document.getElementById('codeField');
+  const form = document.getElementById('otpForm');
+  digits.forEach((el, i) => {
+    el.addEventListener('input', () => {
+      el.value = el.value.replace(/[^0-9]/g, '');
+      if (el.value && i < digits.length - 1) digits[i + 1].focus();
+    });
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !el.value && i > 0) digits[i - 1].focus();
+    });
+    el.addEventListener('paste', (e) => {
+      const text = (e.clipboardData.getData('text') || '').replace(/[^0-9]/g, '').slice(0, 6);
+      if (text.length) {
+        e.preventDefault();
+        text.split('').forEach((ch, idx) => { if (digits[idx]) digits[idx].value = ch; });
+        digits[Math.min(text.length, digits.length) - 1].focus();
+      }
+    });
+  });
+  form.addEventListener('submit', () => {
+    hidden.value = digits.map(d => d.value).join('');
+  });
+</script>
+{% endblock %}

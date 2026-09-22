@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Aegis{% endblock %}</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      font-family: -apple-system, "Segoe UI", Inter, Arial, sans-serif;
+      color: #eef2ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(96,165,250,.35), transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(59,130,246,.30), transparent 50%),
+        linear-gradient(160deg, #050a1f 0%, #0b1230 45%, #101c44 100%);
+    }
+    /* subtle grain */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    /* drifting glass orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: .35;
+      pointer-events: none;
+      animation: drift 18s ease-in-out infinite;
+    }
+    .orb.a { width: 260px; height: 260px; background: #3b82f6; top: 8%; left: 6%; }
+    .orb.b { width: 200px; height: 200px; background: #60a5fa; bottom: 10%; right: 8%; animation-delay: -6s; }
+    .orb.c { width: 160px; height: 160px; background: #818cf8; top: 55%; left: 78%; animation-delay: -12s; }
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(24px, -28px); }
+    }
+
+    .glass {
+      position: relative;
+      z-index: 1;
+      width: 380px;
+      max-width: 100%;
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 26px;
+      padding: 36px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12);
+      animation: rise .5s ease both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .brand .mark {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px;
+      box-shadow: 0 0 18px rgba(96,165,250,.6);
+    }
+    .brand .name { font-weight: 700; font-size: 15px; letter-spacing: .04em; color: #dbe4ff; }
+    .brand .tag { font-size: 10px; letter-spacing: .12em; color: #93a5d1; text-transform: uppercase; margin-left: auto; }
+
+    h1 { margin: 0 0 6px; font-size: 26px; font-weight: 700; }
+    .sub { margin: 0 0 26px; font-size: 13.5px; color: #a9b6de; line-height: 1.5; }
+
+    label { display: block; font-size: 12px; color: #a9b6de; margin: 16px 0 6px; letter-spacing: .02em; }
+    input[type=text], input[type=password], input[type=email] {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: #f3f6ff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+    }
+    input::placeholder { color: #7f8db8; }
+    input:focus {
+      border-color: #60a5fa;
+      background: rgba(255,255,255,.09);
+      box-shadow: 0 0 0 3px rgba(96,165,250,.25);
+    }
+
+    .otp-boxes { display: flex; gap: 8px; margin-top: 6px; }
+    .otp-boxes input {
+      text-align: center;
+      font-size: 20px;
+      letter-spacing: .3em;
+      padding: 13px 0;
+    }
+
+    button.primary {
+      width: 100%;
+      margin-top: 24px;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      color: #06122e;
+      font-weight: 700;
+      font-size: 14.5px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(59,130,246,.45);
+      transition: transform .15s, box-shadow .15s, filter .15s;
+    }
+    button.primary:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(59,130,246,.6); filter: brightness(1.05); }
+    button.primary:active { transform: translateY(0); }
+
+    .foot { text-align: center; margin-top: 18px; font-size: 12.5px; color: #93a5d1; }
+    a { color: #93c5fd; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .badge-line {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 22px; font-size: 11px; color: #7f8db8; letter-spacing: .03em;
+    }
+    .badge-line svg { opacity: .7; }
+
+    .flash {
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      border: 1px solid transparent;
+    }
+    .flash.error { background: rgba(248,113,113,.12); border-color: rgba(248,113,113,.35); color: #fecaca; }
+    .flash.success { background: rgba(74,222,128,.12); border-color: rgba(74,222,128,.35); color: #bbf7d0; }
+
+    code.secret {
+      display: block;
+      margin-top: 6px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 10px;
+      font-size: 12.5px;
+      color: #cbd5e1;
+      word-break: break-all;
+    }
+    img.qr {
+      display: block;
+      margin: 4px auto 6px;
+      border-radius: 14px;
+      background: #fff;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="orb a"></div>
+  <div class="orb b"></div>
+  <div class="orb c"></div>
+
+  <div class="glass">
+    <div class="brand">
+      <div class="mark">&#128737;</div>
+      <div class="name">AEGIS</div>
+      <div class="tag">Secure Access</div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="flash {{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    <div class="badge-line">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Protected by password + time-based one-time codes
+    </div>
+  </div>
+</body>
+</html>

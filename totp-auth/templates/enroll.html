@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Set up two-factor — Aegis{% endblock %}
+{% block content %}
+<h1>Secure your account</h1>
+<p class="sub">Scan this code with Google Authenticator, Authy, or any TOTP app, then enter the 6-digit code it shows you.</p>
+
+<img class="qr" src="{{ url_for('qr') }}" width="190" height="190">
+
+<label>Or enter this key manually</label>
+<code class="secret">{{ secret }}</code>
+
+<form method="post">
+  <label>Verification code</label>
+  <input type="text" name="code" placeholder="6-digit code" required maxlength="6" inputmode="numeric" autofocus>
+  <button class="primary" type="submit">Confirm & activate</button>
+</form>
+{% endblock %}

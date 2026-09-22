@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Set up an account — Aegis{% endblock %}
+{% block content %}
+<h1>Set up an account</h1>
+<p class="sub">Create your credentials, then we'll walk you through securing them with two-factor authentication.</p>
+<form method="post">
+  <label>Username</label>
+  <input type="text" name="username" placeholder="Choose a username" required autofocus>
+  <label>Password</label>
+  <input type="password" name="password" placeholder="Create a password" required>
+  <button class="primary" type="submit">Continue</button>
+</form>
+<p class="foot">Already have an account? <a href="{{ url_for('login') }}">Sign in</a></p>
+{% endblock %}

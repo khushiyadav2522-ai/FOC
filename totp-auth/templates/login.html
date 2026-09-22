@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Welcome back — Aegis{% endblock %}
+{% block content %}
+<h1>Welcome back</h1>
+<p class="sub">Sign in to continue to your protected workspace.</p>
+<form method="post">
+  <label>Username</label>
+  <input type="text" name="username" placeholder="Username" required autofocus>
+  <label>Password</label>
+  <input type="password" name="password" placeholder="Password" required>
+  <button class="primary" type="submit">Continue</button>
+</form>
+<p class="foot">New to Aegis? <a href="{{ url_for('register') }}">Set up an account</a></p>
+{% endblock %}
